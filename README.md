@@ -1,1 +1,55 @@
 # computational_statistics_2
+
+# Define a function for the difference equation using a for loop
+dif_eq <- function(x1, r, n) {
+  x <- numeric(n) # Initialize a numeric vector of length n
+  x[1] <- x1 # Set the initial value
+  for (i in 2:n) {
+    # Apply the difference equation
+    x[i] <- r * x[i - 1] * (1 - x[i - 1])
+  }
+  return(x) # Return the computed values
+}
+
+# Define a function for the difference equation using a while loop
+dif_eq2 <- function(x1, r) {
+  x <- numeric(0) # Initialize an empty numeric vector
+  x[1] <- x1 # Set the initial value
+  n <- 1 # Initialize iteration counter
+  while (TRUE) {
+    xn <- r * x[n] * (1 - x[n]) # Apply the difference equation
+    x <- c(x, xn) # Append the new value
+    if (abs(x[n + 1] - x[n]) < 0.02) { # Check for convergence
+      return(n) # Return the number of iterations for convergence
+    }
+    n <- n + 1 # Increment the counter
+  }
+}
+
+# Execute dif_eq for multiple initial values with r = 2
+x1_values <- c(0.1, 0.2, 0.3, 0.4, 0.5) # Initial values
+n <- 100 # Number of iterations
+
+for (x1 in x1_values) {
+  result <- dif_eq(x1, 2, n) # Compute the difference equation
+  # Plot the results
+  plot(result, type = "l", main = "Convergencia de xn para r = 2", 
+       xlab = "n", ylab = "xn", col = rainbow(length(x1_values)))
+  # Add a legend to the plot
+  legend("topright", legend = paste("x1 =", x1_values), 
+         col = rainbow(length(x1_values)), lty = 1)
+}
+
+# Execute dif_eq with specific parameters (x1 = 0.95, r = 2.99, n = 500)
+x1 <- 0.95
+r <- 2.99
+n <- 500
+result <- dif_eq(x1, r, n) # Compute the difference equation
+# Plot the results
+plot(result, type = "l", main = paste("x1 =", x1, ", r =", r), xlab = "n", ylab = "xn")
+
+# Execute dif_eq2 to find the number of iterations for convergence
+x1 <- 0.95
+r <- 2.99
+iterations <- dif_eq2(x1, r) # Compute the number of iterations for convergence
+cat("Número de iteraciones necesarias para converger: ", iterations, "\n") # Print the result
